@@ -117,10 +117,13 @@ namespace Microsoft.Templates.UI.VisualStudio
                     var context = new UserSelectionContext(_language, _platform);
                     if (!string.IsNullOrEmpty(_appModel))
                     {
-                        context.PropertyBag.Add("appmodel", _appModel);
+                        context.AddAppModel(_appModel);
                     }
 
-                    _userSelection = WizardLauncher.Instance.StartNewProject(context, _replacementsDictionary["$wts.requiredworkloads$"], new VSStyleValuesProvider());
+                    var requiredVersion = _replacementsDictionary.ContainsKey("$wts.requiredversion$") ? _replacementsDictionary["$wts.requiredversion$"] : string.Empty;
+                    var requiredworkloads = _replacementsDictionary.ContainsKey("$wts.requiredworkloads$") ? _replacementsDictionary["$wts.requiredworkloads$"] : string.Empty;
+
+                    _userSelection = WizardLauncher.Instance.StartNewProject(context, requiredVersion, requiredworkloads, new VSStyleValuesProvider());
                 }
             }
             catch (WizardBackoutException)

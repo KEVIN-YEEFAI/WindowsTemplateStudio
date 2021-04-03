@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Microsoft.UI.Xaml;
 using Windows.ApplicationModel;
 using Param_RootNamespace.Contracts.Services;
+using Param_RootNamespace.Helpers;
 
 namespace Param_RootNamespace.ViewModels
 {
@@ -38,8 +39,11 @@ namespace Param_RootNamespace.ViewModels
                     _switchThemeCommand = new RelayCommand<ElementTheme>(
                         async (param) =>
                         {
-                            ElementTheme = param;
-                            await _themeSelectorService.SetThemeAsync(param);
+                            if (ElementTheme != param)
+                            {
+                                ElementTheme = param;
+                                await _themeSelectorService.SetThemeAsync(param);
+                            }
                         });
                 }
 
@@ -56,7 +60,7 @@ namespace Param_RootNamespace.ViewModels
 
         private string GetVersionDescription()
         {
-            var appName = "AppDisplayName";
+            var appName = "AppDisplayName".GetLocalized();
             var package = Package.Current;
             var packageId = package.Id;
             var version = packageId.Version;
